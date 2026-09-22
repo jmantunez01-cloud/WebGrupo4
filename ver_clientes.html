@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>JKVAM</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" type="text/css" href="vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/style.css" />
+</head>
+<body>
+    <div class="pre-loader">
+        <div class="pre-loader-box">
+            <div class="loader-logo">
+                <img src="logojkvam.png" alt="Cargando..." />
+            </div>
+            <div class="loader-progress" id="progress_div">
+                <div class="bar" id="bar1"></div>
+            </div>
+            <div class="percent" id="percent1">0%</div>
+            <div class="loading-text">Cargando...</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon bi bi-list"></div>
+            <div class="header-search ml-3">
+                <form>
+                    <div class="form-group mb-0 position-relative">
+                        <input type="text" class="form-control search-input" placeholder="🔎 Buscar..." />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            <img src="fotoperfil.png" alt="" />
+                        </span>
+                        <span class="user-name">Técnico</span> </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Perfil</a>
+                        <a class="dropdown-item" href="index.html"><i class="dw dw-logout"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo">
+            <a href="index.html">
+                <img src="logojkvam.png" alt="" class="light-logo" />
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon bi bi-house"></span><span class="mtext">Menú</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="listado_de_tickets.html">Listado de tickets</a></li>
+                            <li><a href="crear_ticket.html">Crear ticket</a></li>
+                            <li><a href="listado_clientes.html" class="active">Listado de clientes</a></li>
+                            <li><a href="crear_cliente.html">Añadir cliente</a></li> 
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+                
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <h2 class="text-primary h2">Información de Clientes</h2>
+                            <nav aria-label="breadcrumb" role="navigation">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="listado_de_tickets.html">Inicio</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Detalles del Cliente</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pd-20 card-box mb-30">
+                    <form>
+                        <h4 class="text-blue h4 mb-20">Datos Personales</h4>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Nombre / Empresa</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="text" value="Juan Pérez García">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">DNI / NIF</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="text" value="12345678X">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Email</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" value="juan.perez@ejemplo.com" type="email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Teléfono</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" value="+34 600 000 000" type="tel">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Dirección</label>
+                            <div class="col-sm-12 col-md-10">
+                                <textarea class="form-control">Calle Falsa 123, Puerta B, 28001 Madrid, España</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Categoría</label>
+                            <div class="col-sm-12 col-md-10">
+                                <select class="custom-select col-12">
+                                    <option selected>Cliente VIP</option>
+                                    <option>Cliente Regular</option>
+                                    <option>Nuevo Cliente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendors/scripts/core.js"></script>
+    <script src="vendors/scripts/script.min.js"></script>
+    <script src="vendors/scripts/process.js"></script>
+    <script src="vendors/scripts/layout-settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>JKVAM</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" type="text/css" href="vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/style.css" />
+
+    <style>
+        /* --- Estilos Generales y Header (Existentes) --- */
+        .main-container {
+            padding-top: 80px; 
+        }
+        .header-left .search-input {
+            border-radius: 20px;
+            padding-left: 35px;
+        }
+        .header-left .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        @media (max-width: 767px) {
+            .header-left .header-search {
+                display: none; 
+            }
+            .main-container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+
+        /* --- NUEVOS ESTILOS PARA EL FORMULARIO DE CLIENTES --- */
+        
+        /* Título de la página y breadcrumb */
+        .page-title {
+            color: #1b00ff; /* Azul vibrante */
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .breadcrumb-item a {
+            color: #6c757d;
+        }
+        .breadcrumb-item.active {
+            color: #1b00ff;
+        }
+
+        /* Subtítulos y texto descriptivo */
+        .form-section-title {
+            color: #1b00ff;
+            font-weight: 600;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .form-description {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos de las etiquetas de los inputs */
+        .form-group label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        /* Estilos de los campos de entrada (Inputs) */
+        .form-control-custom {
+            border: 1px solid #ced4da;
+            border-radius: 8px; /* Bordes redondeados */
+            padding: 10px 15px;
+            height: auto;
+            font-size: 14px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-control-custom:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        /* Color del placeholder */
+        .form-control-custom::placeholder {
+            color: #adb5bd;
+        }
+
+        /* Estilo específico para el select de Categoría */
+        .select-custom {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M10.293 3.293 6 7.586 1.707 3.293A1 1 0 0 0 .293 4.707l5 5a1 1 0 0 0 1.414 0l5-5a1 1 0 1 0-1.414-1.414z" fill="%23495057"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px;
+            padding-right: 40px;
+        }
+
+        /* Botón de guardar/registrar */
+        .btn-register {
+            background-color: #1b00ff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            float: right; /* Alinear a la derecha */
+            transition: background-color 0.15s ease-in-out;
+        }
+        .btn-register:hover {
+            background-color: #0000cd; /* Azul más oscuro al pasar el ratón */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="pre-loader">
+        <div class="pre-loader-box">
+            <div class="loader-logo">
+                <img src="logojkvam.png" alt="" />
+            </div>
+            <div class="loader-progress" id="progress_div">
+                <div class="bar" id="bar1"></div>
+            </div>
+            <div class="percent" id="percent1">0%</div>
+            <div class="loading-text">Cargando...</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon bi bi-list"></div>
+            <div class="header-search ml-3">
+                <form>
+                    <div class="form-group mb-0 position-relative">
+                        <input type="text" class="form-control search-input" placeholder="🔎 Buscar..." />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                    </a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            <img src="fotoperfil.png" alt="" />
+                        </span>
+                        <span class="user-name">Técnico</span> </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Perfil</a>
+                        <a class="dropdown-item" href="index.html"><i class="dw dw-logout"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo">
+            <a href="index.html">
+                <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+                <img src="logojkvam.png" alt="" class="light-logo" />
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon bi bi-house"></span><span class="mtext">Menú</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="listado_de_tickets.html">Listado de tickets</a></li>
+                            <li><a href="crear_ticket.html">Crear ticket</a></li>
+                            <li><a href="listado_clientes.html">Listado de clientes</a></li>
+                            <li><a href="crear_cliente.html" class="active">Crear cliente</a></li> </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+                
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <h2 class="page-title">Gestión de Clientes</h2>
+                            <nav aria-label="breadcrumb" role="navigation">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Añadir Cliente</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pd-20 card-box mb-30">
+                    <form>
+                        <h3 class="form-section-title">Nuevo Registro</h3>
+                        <p class="form-description">Ingresa los datos solicitados para dar de alta al cliente en la base de datos.</p>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Nombre Completo / Empresa</label>
+                                    <input type="text" class="form-control form-control-custom" placeholder="Nombre del cliente" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>DNI / NIF / CIF</label>
+                                    <input type="text" class="form-control form-control-custom" placeholder="Identificación fiscal" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input type="email" class="form-control form-control-custom" placeholder="ejemplo@correo.com">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label>Teléfono de Contacto</label>
+                                    <input type="tel" class="form-control form-control-custom" placeholder="Número de teléfono">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Dirección Postal</label>
+                            <textarea class="form-control form-control-custom" rows="4" placeholder="Dirección completa..."></textarea>
+                        </div>
+
+                        <div class="form-group mb-30">
+                            <label>Categoría</label>
+                            <select class="form-control form-control-custom select-custom">
+                                <option>Cliente VIP</option>
+                                <option>Cliente Regular</option>
+                                <option>Nuevo Cliente</option>
+                            </select>
+                        </div>
+
+                        <div class="clearfix">
+                            <button type="submit" class="btn btn-register">Registrar Cliente</button>
+                        </div>
+
+                    </form>
+                </div>
+                
+                </div>
+        </div>
+    </div>
+
+    <script src="vendors/scripts/core.js"></script>
+    <script src="vendors/scripts/script.min.js"></script>
+    <script src="vendors/scripts/process.js"></script>
+    <script src="vendors/scripts/layout-settings.js"></script>
+    
+    </body>
+</html>

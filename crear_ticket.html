@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>JKVAM</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" type="text/css" href="vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/style.css" />
+
+    <style>
+        /* Ajuste de color del encabezado de la tabla */
+        .table thead th {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            font-weight: 600;
+            border-bottom: 2px solid #111;
+        }
+        .table-bordered, .table-bordered th, .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8fafc;
+        }
+        .main-container {
+            padding-top: 80px;
+        }
+        .header-left .search-input {
+            border-radius: 20px;
+            padding-left: 35px;
+        }
+        .header-left .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        @media (max-width: 767px) {
+            .header-left .header-search {
+                display: none;
+            }
+            .main-container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+
+        /* Barra de estado tipo Flecha */
+        .status-stepper {
+            display: flex;
+            width: 100%;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .step {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            color: #64748b;
+            position: relative;
+            background: #f8fafc;
+            margin-right: 2px;
+            font-size: 13px;
+            clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
+            transition: all 0.3s;
+        }
+        .step:first-child { clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 0% 0%); }
+        .step.active {
+            background: #007bff;
+            color: white;
+            font-weight: 600;
+        }
+
+        .card-box {
+            background-color: #ffffff !important;
+            color: #334155 !important;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .form-control, .custom-select {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #1e293b !important;
+        }
+        .input-group-text {
+            background-color: #f1f5f9 !important;
+            color: #475569 !important;
+        }
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+        }
+        .text-danger {
+            color: #ef4444 !important;
+        }
+
+        /* Botón Crear Ticket Personalizado */
+        .btn-create-ticket {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+        }
+        .btn-create-ticket:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+            color: white;
+        }
+
+        .nav-tabs.customtab .nav-link.active {
+            color: #007bff !important;
+            border-bottom: 3px solid #007bff !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="pre-loader">
+        <div class="pre-loader-box">
+            <div class="loader-logo">
+                <img src="logojkvam.png" alt="" />
+            </div>
+            <div class="loader-progress" id="progress_div">
+                <div class="bar" id="bar1"></div>
+            </div>
+            <div class="percent" id="percent1">0%</div>
+            <div class="loading-text">Cargando...</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon bi bi-list"></div>
+            <div class="header-search ml-3">
+                <form>
+                    <div class="form-group mb-0 position-relative">
+                        <input type="text" class="form-control search-input" placeholder="🔎 Buscar..." />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            <img src="fotoperfil.png" alt="" />
+                        </span>
+                        <span class="user-name">Técnico</span> </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Perfil</a>
+                        <a class="dropdown-item" href="index.html"><i class="dw dw-logout"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo">
+            <a href="index.html">
+                <img src="logojkvam.png" alt="" class="light-logo" />
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon bi bi-house"></span><span class="mtext">Menú</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="listado_de_tickets.html">Listado de tickets</a></li>
+                            <li><a href="crear_ticket.html">Crear ticket</a></li>
+                            <li><a href="listado_clientes.html">Listado de clientes</a></li>
+                            <li><a href="crear_cliente.html">Crear cliente</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+                
+                <div class="pd-20 card-box mb-30">
+                    <div class="status-stepper d-flex mb-30">
+                        <div class="step active">Nuevo</div>
+                        <div class="step">En Progreso</div>
+                        <div class="step">En Espera</div>
+                        <div class="step">Resuelto</div>
+                        <div class="step">Cerrado</div>
+                        <div class="step">Cancelado</div>
+                    </div>
+
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Número</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" value="INC3351033" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label text-danger">* Solicitante <i class="icon-copy dw dw-question"></i></label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Buscar usuario...">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label text-danger">* Teléfono <i class="icon-copy dw dw-question"></i></label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-copy dw dw-phone-call"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label text-danger">* Ubicación <i class="icon-copy dw dw-question"></i></label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Estado</label>
+                                    <div class="col-sm-8">
+                                        <select class="custom-select form-control">
+                                            <option selected>Nuevo</option>
+                                            <option>En curso</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Impacto</label>
+                                    <div class="col-sm-8">
+                                        <select class="custom-select form-control">
+                                            <option>4 - Bajo</option>
+                                            <option>3 - Medio</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Prioridad</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" value="4 - Baja" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label">Asignado a</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-danger">* Resumen</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" placeholder="Breve descripción de la incidencia">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Descripción</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="tab mt-30">
+                            <ul class="nav nav-tabs customtab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#notes" role="tab">Notas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#related" role="tab">Registros Relacionados</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="notes" role="tabpanel">
+                                    <div class="pd-20 bg-light" style="border: 1px solid #dee2e6; border-top: none;">
+                                        <textarea class="form-control" placeholder="Escriba notas internas aquí..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <hr>
+                                <button type="submit" class="btn btn-create-ticket">
+                                    <i class="bi bi-plus-circle-fill mr-2"></i> <a href="info_ticket.html">CREAR TICKET</a>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary ml-2" style="padding: 12px 25px; border-radius: 8px;">
+                                    <a href="listado_de_tickets.html">Cancelar</a>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendors/scripts/core.js"></script>
+    <script src="vendors/scripts/script.min.js"></script>
+    <script src="vendors/scripts/process.js"></script>
+    <script src="vendors/scripts/layout-settings.js"></script>
+    
+    <script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    
+    <script>
+        $('document').ready(function(){
+            $('.data-table').DataTable({
+                scrollCollapse: true,
+                autoWidth: false,
+                responsive: true,
+                columnDefs: [{
+                    targets: "datatable-nosort",
+                    orderable: false,
+                }],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "language": {
+                    "info": "_START_-_END_ de _TOTAL_ entradas",
+                    "searchPlaceholder": "Buscar...",
+                    paginate: {
+                        next: '<i class="ion-chevron-right"></i>',
+                        previous: '<i class="ion-chevron-left"></i>'  
+                    }
+                },
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>JKVAM</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" type="text/css" href="vendors/styles/core.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors/styles/style.css" />
+
+    <style>
+        /* Ajuste de color del encabezado de la tabla para que coincida con el mockup */
+        .table thead th {
+            background-color: #1e3a8a; /* Azul oscuro */
+            color: #ffffff;
+            font-weight: 600;
+            border-bottom: 2px solid #111;
+        }
+        /* Ajuste general de la tabla para que se parezca al mockup (bordes, etc.) */
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        /* Color de fondo para filas impares */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8fafc;
+        }
+        /* Asegurar que el contenido no se corte en pantallas pequeñas */
+        .main-container {
+            padding-top: 80px; /* Espacio para el header fijo */
+        }
+        /* Estilo para el campo de búsqueda */
+        .header-left .search-input {
+            border-radius: 20px;
+            padding-left: 35px;
+        }
+        .header-left .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        /* Ajustes responsive específicos */
+        @media (max-width: 767px) {
+            .header-left .header-search {
+                display: none; /* Ocultar búsqueda en móvil para simplificar, deskapp tiene toggle */
+            }
+            .main-container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+        /* Barra de estado tipo Flecha (Stepper) */
+/* Barra de estado tipo Flecha (Stepper) - Versión Azul y Clara */
+.status-stepper {
+    display: flex;
+    width: 100%;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+.step {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    color: #64748b;
+    position: relative;
+    background: #f8fafc;
+    margin-right: 2px;
+    font-size: 13px;
+    clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
+    transition: all 0.3s;
+}
+.step:first-child { clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 0% 0%); }
+.step.active {
+    background: #007bff; /* Azul primario */
+    color: white;
+    font-weight: 600;
+}
+
+/* Ajustes para el Formulario Claro */
+.card-box {
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.form-control, .custom-select {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+}
+.form-control:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.input-group-text {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+}
+.form-control[readonly] {
+    background-color: #f8fafc !important;
+}
+label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+}
+.text-danger {
+    color: #ef4444 !important;
+}
+
+/* Pestañas (Tabs) en Azul */
+.nav-tabs.customtab .nav-link {
+    color: #64748b;
+}
+.nav-tabs.customtab .nav-link.active {
+    color: #007bff !important;
+    border-bottom: 3px solid #007bff !important;
+}
+    </style>
+</head>
+<body>
+    <div class="pre-loader">
+        <div class="pre-loader-box">
+            <div class="loader-logo">
+                <img src="logojkvam.png" alt="" />
+            </div>
+            <div class="loader-progress" id="progress_div">
+                <div class="bar" id="bar1"></div>
+            </div>
+            <div class="percent" id="percent1">0%</div>
+            <div class="loading-text">Cargando...</div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon bi bi-list"></div>
+            <div class="header-search ml-3">
+                <form>
+                    <div class="form-group mb-0 position-relative">
+                        <input type="text" class="form-control search-input" placeholder="🔎 Buscar..." />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <!--<i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>-->
+                    </a>
+                    <!--<div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="vendors/images/img.jpg" alt="" />
+                                        <h3>Sistema</h3>
+                                        <p>Nuevo ticket asignado.</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            <img src="fotoperfil.png" alt="" />
+                        </span>
+                        <span class="user-name">Técnico</span> </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Perfil</a>
+                        <a class="dropdown-item" href="index.html"><i class="dw dw-logout"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo">
+            <a href="index.html">
+                <img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo" />
+                <img src="logojkvam.png" alt="" class="light-logo" />
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon bi bi-house"></span><span class="mtext">Menú</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="listado_de_tickets.html">Listado de tickets</a></li>
+                            <li><a href="crear_ticket.html">Crear ticket</a></li>
+                            <li><a href="listado_clientes.html">Listado de clientes</a></li>
+                            <li><a href="crear_cliente.html">Crear cliente</a></li>
+                        </ul>
+                    </li>
+                    <!--<li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <span class="micon bi bi-ticket"></span><span class="mtext">Tickets</span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#">Crear ticket</a></li>
+                            <li><a href="#" class="active">Asignadas a técnico</a></li>
+                            <li><a href="#">Sin asignar</a></li>
+                            <li><a href="#">Pendientes de cliente</a></li>
+                            <li><a href="#">Pendientes proveedor</a></li>
+                        </ul>
+                    </li>-->
+                    </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+                
+                <div class="pd-20 card-box mb-30">
+    <div class="status-stepper d-flex mb-30">
+        <div class="step">Nuevo</div>
+        <div class="step active">En Progreso</div>
+        <div class="step">En Espera</div>
+        <div class="step">Resuelto</div>
+        <div class="step">Cerrado</div>
+        <div class="step">Cancelado</div>
+    </div>
+
+    <form>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Número</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" value="INC-2026-0417" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-danger">* Solicitante <i class="icon-copy dw dw-question"></i></label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="Jose Manuel Antunez Gutierrez">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-danger">* Teléfono <i class="icon-copy dw dw-question"></i></label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="+34 600 000 000">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="icon-copy dw dw-phone-call"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-danger">* Ubicación <i class="icon-copy dw dw-question"></i></label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="Oficina Central - Planta 2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Categoría</label>
+                    <div class="col-sm-8">
+                        <select class="custom-select form-control">
+                            <option>Software</option>
+                            <option selected>Hardware</option>
+                            <option>Redes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Estado</label>
+                    <div class="col-sm-8">
+                        <select class="custom-select form-control">
+                            <option>Nuevo</option>
+                            <option selected>En curso</option>
+                            <option>Pendiente de proveedor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Impacto</label>
+                    <div class="col-sm-8">
+                        <select class="custom-select form-control">
+                            <option>1 - Extremo</option>
+                            <option selected>2 - Alto</option>
+                            <option>3 - Bajo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Prioridad</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" value="2 - Alta" readonly style="background-color: #fff3cd; font-weight: bold;">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label text-primary">Asignado a <i class="icon-copy dw dw-question"></i></label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="Técnico de Guardia Nivel 1">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="dw dw-search2"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Abierto el</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" value="2026-04-17 12:00:15" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-danger">* Resumen</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" value="Portátil no arranca tras actualización de BIOS">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Descripción</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="3">El usuario reporta que después de aplicar las actualizaciones críticas del sistema, el equipo (Acer Aspire 3) se apaga y al encender muestra pantalla negra. No emite pitidos de error.</textarea>
+            </div>
+        </div>
+
+        <div class="tab mt-30">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#notes" role="tab">Notas de Trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#history" role="tab">Historial</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="notes" role="tabpanel">
+                    <div class="pd-20 bg-light" style="border: 1px solid #dee2e6; border-top: none;">
+                        <div class="mb-10 p-2 border-bottom">
+                            <strong>12:05 - Sistema:</strong> Ticket asignado automáticamente al grupo 'Soporte Hardware'.
+                        </div>
+                        <div class="mb-10 p-2 border-bottom">
+                            <strong>12:10 - Técnico:</strong> He contactado con el usuario. Voy a proceder a realizar un drenaje de energía y re-flasheo manual.
+                        </div>
+                        <textarea class="form-control mt-10" placeholder="Añadir nueva nota de trabajo..."></textarea>
+                        <button type="button" class="btn btn-primary btn-sm mt-10">Guardar Nota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-right mt-20">
+            <button type="button" class="btn btn-secondary">Cancelar</button>
+            <button type="button" class="btn btn-info text-white">
+                <i class="icon-copy dw dw-invoice"></i> <a href="Factura JKVAM Solutions.pdf" target="_blank" class="text-white">Facturación</a>
+            </button>
+            <button type="submit" class="btn btn-primary">Actualizar Ticket</button>
+        </div>
+        
+    </form>
+</div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="vendors/scripts/core.js"></script>
+    <script src="vendors/scripts/script.min.js"></script>
+    <script src="vendors/scripts/process.js"></script>
+    <script src="vendors/scripts/layout-settings.js"></script>
+    
+    <script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    
+    <script>
+        $('document').ready(function(){
+            $('.data-table').DataTable({
+                scrollCollapse: true,
+                autoWidth: false,
+                responsive: true,
+                columnDefs: [{
+                    targets: "datatable-nosort",
+                    orderable: false,
+                }],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "language": {
+                    "info": "_START_-_END_ de _TOTAL_ entradas",
+                    "searchPlaceholder": "Buscar...",
+                    paginate: {
+                        next: '<i class="ion-chevron-right"></i>',
+                        previous: '<i class="ion-chevron-left"></i>'  
+                    }
+                },
+            });
+        });
+    </script>
+</body>
+</html>
