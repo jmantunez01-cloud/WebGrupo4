@@ -103,7 +103,7 @@
 							<div class="login-title">
 								<h2 class="text-center text-primary">Accede a tu cuenta</h2>
 							</div>
-							<form>
+							<form action="respuesta.php" method="POST">
 								<div class="select-role">
 									<div class="btn-group btn-group-toggle" data-toggle="buttons">
 										<label class="btn active">
@@ -136,7 +136,7 @@
 									<input
 										type="text"
 										class="form-control form-control-lg"
-										placeholder="Usuario"
+										placeholder="Usuario" name="usuario"
 									/>
 									<div class="input-group-append custom">
 										<span class="input-group-text"
@@ -146,9 +146,9 @@
 								</div>
 								<div class="input-group custom">
 									<input
-										type="Contraseña"
+										type="text"
 										class="form-control form-control-lg"
-										placeholder="Contraseña"
+										placeholder="Contraseña" name="contrasena"
 									/>
 									<div class="input-group-append custom">
 										<span class="input-group-text"
@@ -178,15 +178,15 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="input-group mb-0">
-											<!--
-											use code for form submit
+											
+											
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Iniciar sesión">
-										-->
-											<a
+										
+											<!--<a
 												class="btn btn-primary btn-lg btn-block"
 												href="listado_de_tickets.html"
 												>Iniciar sesión</a
-											>
+											>-->
 										</div>
 									</div>
 								</div>
